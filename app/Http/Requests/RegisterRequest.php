@@ -43,4 +43,21 @@ class RegisterRequest extends FormRequest
             ],
         ];
     }
+    
+    public function messages()
+    {
+        return [
+            'first_name.required' => 'Vui lòng nhập tên.',
+            'first_name.max' => 'Tên không được vượt quá 30 ký tự.',
+            'last_name.required' => 'Vui lòng nhập họ.',
+            'last_name.max' => 'Họ không được vượt quá 30 ký tự.',
+            'email.required' => 'Vui lòng nhập email.',
+            'email.email' => 'Email không đúng định dạng.',
+            'email.unique' => 'Email đã tồn tại.',
+            'email.regex' => 'Email không hợp lệ.',
+            'password.required' => 'Vui lòng nhập mật khẩu.',
+            'password.min' => 'Mật khẩu phải có ít nhất 8 ký tự.',
+            'password.regex' => 'Mật khẩu phải bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt.',
+        ];
+    }
 }

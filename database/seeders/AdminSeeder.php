@@ -14,9 +14,8 @@ class AdminSeeder extends Seeder
      */
     public function run(): void
     {
-        User::updateOrCreate(
-            ['email' => 'superadmin@khgc.com'], // Kiểm tra nếu email tồn tại thì cập nhật, nếu không thì tạo mới
-            [
+        User::insert(
+            [[
                 'first_name' => 'Admin',
                 'last_name' => 'Super',
                 'email' => 'superadmin@khgc.com',
@@ -26,7 +25,18 @@ class AdminSeeder extends Seeder
                 'role' => 'admin',
                 'created_at' => now(),
                 'updated_at' => now(),
-            ]
-            );
+            ], [
+                'first_name' => 'Lieu',
+                'last_name' => 'phan',
+                'email' => 'liuliu@gmail.com',
+                'password' => Hash::make('Abcd@1234'),
+                'address' => '123 kkk Street',
+                'status' => 1, // Kích hoạt tài khoản
+                'role' => 'admin',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],]
+
+        );
     }
 }

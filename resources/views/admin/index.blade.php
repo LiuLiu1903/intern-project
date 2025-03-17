@@ -1,14 +1,11 @@
-<h2 class="custom-title">Phan Van Lieu</h2>  
+@extends('layouts.app')
 
-<style>  
-    .custom-title {  
-        color: yellow;  
-        font-size: 2rem;  
-        display: flex;  
-        justify-content: center;  
-        align-items: center;  
-        height: 100vh;  
-        margin: 0;  
-        background-color: white;  
-    }  
-</style>
+@section('content')
+    @if(session('success'))
+        <div class="alert alert-success">{{ session('success') }}</div>
+    @endif
+
+    <h1>Danh sách bài viết</h1>
+    <a href="{{ route('posts.create') }}" class="btn btn-primary">Tạo mới</a>
+@endsection
+

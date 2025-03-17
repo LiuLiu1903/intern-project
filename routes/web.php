@@ -10,6 +10,9 @@ use App\Mail\TestMail;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\DashboardController;
 use App\Http\Middleware\CheckUserStatus;
+use App\Http\Requests\UpdateUserRequest;
+use App\Http\Controllers\UserController;
+
 
 // Route mặc định
 Route::get('/', function () {
@@ -56,9 +59,12 @@ Route::middleware(['auth', CheckUserStatus::class])->group(function () {
         Route::post('/posts', 'store')->name('posts.store');
     });
 
-    // Cập nhật hồ sơ
-    Route::controller(ProfileController::class)->group(function () {
-        Route::get('/profile', 'edit')->name('profile.edit');
-        Route::put('/profile', 'update')->name('profile.update');
+    // Cập nhật hồ sơ có sử dụng binding models
+    Route::middleware('auth')->group(function () {
+        Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
     });
+    
+    Route::put('/users/{id}', [UserController::class, 'update'])->middleware('auth'); 
+    
 });

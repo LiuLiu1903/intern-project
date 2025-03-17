@@ -41,7 +41,7 @@
             <h4>Dashboard</h4>
             <a href="{{ route('dashboard') }}">🏠 Trang chủ</a>
             <a href="{{ route('posts.index') }}">📝 Quản lý bài viết</a>
-            <a href="{{ route('profile.edit') }}">👤 Hồ sơ</a>
+            <a href="{{ route('profile.edit', auth()->id()) }}">👤 Hồ sơ</a>
             <a href="{{ route('logout') }}">🚪 Đăng xuất</a>
         </div>
 

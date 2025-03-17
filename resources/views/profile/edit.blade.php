@@ -1,38 +1,35 @@
-<form method="POST" action="{{ route('profile.update') }}">
-    @csrf
-    @method('PUT')
+@extends('layouts.app')
 
-    <!-- First Name -->
-    <div>
-        <label for="first_name">Họ</label>
-        <input type="text" name="first_name" value="{{ old('first_name', auth()->user()->first_name) }}">
-        @error('first_name')
-            <div class="text-red-500">{{ $message }}</div>
-        @enderror
-    </div>
+@section('content')
+<div class="container">
+    <h2>Cập nhật hồ sơ</h2>
 
-    <!-- Last Name -->
-    <div>
-        <label for="last_name">Tên</label>
-        <input type="text" name="last_name" value="{{ old('last_name', auth()->user()->last_name) }}">
-        @error('last_name')
-            <div class="text-red-500">{{ $message }}</div>
-        @enderror
-    </div>
+    @if(session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
 
-    <!-- Address -->
-    <div>
-        <label for="address">Địa chỉ</label>
-        <input type="text" name="address" value="{{ old('address', auth()->user()->address) }}">
-        @error('address')
-            <div class="text-red-500">{{ $message }}</div>
-        @enderror
-    </div>
+    <form action="{{ route('profile.update') }}" method="POST">
+        @csrf
+        @method('PUT')  <!-- Bắt buộc để Laravel hiểu đây là PUT request -->
+        
+        <div class="mb-3">
+            <label for="first_name" class="form-label">First Name:</label>
+            <input type="text" class="form-control" name="first_name" value="{{ old('first_name', Auth::user()->first_name) }}">
+        </div>
 
-    <button type="submit">Cập nhật</button>
-</form>
-@if (session('success'))
-    <div class="text-green-500">
-        {{ session('success') }}
-    </div>
-@endif
+        <div class="mb-3">
+            <label for="last_name" class="form-label">Last Name:</label>
+            <input type="text" class="form-control" name="last_name" value="{{ old('last_name', Auth::user()->last_name) }}">
+        </div>
+
+        <div class="mb-3">
+            <label for="address" class="form-label">Address:</label>
+            <input type="text" class="form-control" name="address" value="{{ old('address', Auth::user()->address) }}">
+        </div>
+
+        <button type="submit" class="btn btn-primary">Cập nhật hồ sơ</button>
+    </form>
+</div>
+@endsection

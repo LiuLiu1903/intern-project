@@ -56,6 +56,7 @@ Route::middleware(['auth', CheckUserStatus::class])->group(function () {
 
     Route::middleware(['auth'])->group(function () {
         Route::resource('posts', PostController::class);
+        Route::post('/posts/upload-image', [PostController::class, 'uploadImage'])->name('posts.upload.image');
     });
 
     // Cập nhật hồ sơ có sử dụng binding models

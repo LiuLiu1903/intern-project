@@ -1,12 +1,8 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Chào bạn!</title>
-</head>
-<body>
-    <p>Xin chào {{ $user->first_name }} {{ $user->last_name }},</p>
-    <p>Cảm ơn bạn đã đăng ký tài khoản. Chúng tôi sẽ sớm xác nhận tài khoản của bạn!</p>
-    <p>Trân trọng,</p>
-    <p>Đội ngũ hỗ trợ</p>
-</body>
-</html>
+<h1>Xin chào, {{ $user->first_name }}!</h1>
+<p>Cảm ơn bạn đã đăng ký tài khoản. Vui lòng nhấp vào nút bên dưới để xác nhận tài khoản:</p>
+
+<a href="{{ $verificationUrl }}" style="display:inline-block; padding: 10px 20px; background-color: #4CAF50; color: #fff; text-decoration: none; border-radius: 5px;">
+    Xác nhận tài khoản
+</a>
+
+<p>Nếu bạn không đăng ký tài khoản, vui lòng bỏ qua email này.</p>

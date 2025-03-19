@@ -2,82 +2,81 @@
 
 @section('content')
 <div class="container">
-    <h2>Tạo Bài Viết Mới</h2>
+    <h2>Chỉnh Sửa Bài Viết</h2>
     
-    {{-- ✅ Hiển thị thông báo thành công nếu có --}}
+    {{-- ✅ Hiển thị thông báo thành công --}}
     @if(session('success'))
         <div class="alert alert-success">
             {{ session('success') }}
         </div>
     @endif
 
-    <form method="POST" action="{{ route('posts.store') }}" enctype="multipart/form-data">
+    {{-- ✅ Form cập nhật --}}
+    <form method="POST" action="{{ route('posts.update', $post->id) }}" enctype="multipart/form-data">
         @csrf
+        @method('PUT')
 
-        {{-- Tiêu đề --}}
-        <div class="form-group">
-            <label>Tiêu đề</label>
-            <input type="text" name="title" class="form-control" value="{{ old('title') }}" required>
+        {{-- ✅ Tiêu đề --}}
+        <div class="mb-3">
+            <label class="form-label">Tiêu đề</label>
+            <input type="text" name="title" class="form-control" value="{{ old('title', $post->title) }}" required>
             @error('title')
-                <small class="text-danger">{{ $message }}</small>
+                <span class="text-danger">{{ $message }}</span>
             @enderror
         </div>
 
-        {{-- Mô tả --}}
-        <div class="form-group">
-            <label>Mô tả</label>
-            <input type="text" name="description" class="form-control" value="{{ old('description') }}">
+        {{-- ✅ Mô tả --}}
+        <div class="mb-3">
+            <label class="form-label">Mô tả</label>
+            <input type="text" name="description" class="form-control" value="{{ old('description', $post->description) }}">
             @error('description')
-                <small class="text-danger">{{ $message }}</small>
+                <span class="text-danger">{{ $message }}</span>
             @enderror
         </div>
 
-        {{-- Nội dung (Summernote) --}}
-        <div class="form-group">
-            <label>Nội dung</label>
-            <textarea id="summernote" name="content" class="form-control">{{ old('content') }}</textarea>
+        {{-- ✅ Nội dung (Summernote) --}}
+        <div class="mb-3">
+            <label class="form-label">Nội dung</label>
+            <textarea id="summernote" name="content" class="form-control">{{ old('content', $post->content) }}</textarea>
             @error('content')
-                <small class="text-danger">{{ $message }}</small>
+                <span class="text-danger">{{ $message }}</span>
             @enderror
         </div>
 
-        {{-- Ngày xuất bản --}}
-        <div class="form-group">
-            <label>Ngày xuất bản</label>
-            <input type="datetime-local" name="publish_date" class="form-control" value="{{ old('publish_date') }}">
+        {{-- ✅ Ngày xuất bản --}}
+        <div class="mb-3">
+            <label class="form-label">Ngày xuất bản</label>
+            <input type="datetime-local" name="publish_date" class="form-control" 
+                   value="{{ old('publish_date', $post->publish_date ? date('Y-m-d\TH:i', strtotime($post->publish_date)) : '') }}">
             @error('publish_date')
-                <small class="text-danger">{{ $message }}</small>
+                <span class="text-danger">{{ $message }}</span>
             @enderror
         </div>
 
-        {{-- Trạng thái --}}
-        <div class="form-group">
-            <label>Trạng thái</label>
-            <select name="status" class="form-control">
-                <option value="0" {{ old('status') == 0 ? 'selected' : '' }}>Bài viết mới</option>
-                <option value="1" {{ old('status') == 1 ? 'selected' : '' }}>Đã cập nhật</option>
-                <option value="2" {{ old('status') == 2 ? 'selected' : '' }}>Đã xuất bản</option>
-            </select>
-            @error('status')
-                <small class="text-danger">{{ $message }}</small>
-            @enderror
-        </div>
+        {{-- ✅ Ẩn trường trạng thái --}}
+        <input type="hidden" name="status" value="{{ $post->status }}">
 
-        {{-- Ảnh đại diện --}}
-        <div class="form-group">
-            <label>Ảnh đại diện</label>
+        {{-- ✅ Upload ảnh đại diện --}}
+        <div class="mb-3">
+            <label class="form-label">Ảnh đại diện</label>
             <input type="file" name="thumbnail" class="form-control">
+            @if ($post->thumbnail)
+                <div class="mt-2">
+                    <img src="{{ $post->thumbnail }}" alt="Thumbnail" class="img-thumbnail" width="150">
+                </div>
+            @endif
             @error('thumbnail')
-                <small class="text-danger">{{ $message }}</small>
+                <span class="text-danger">{{ $message }}</span>
             @enderror
         </div>
 
-        {{-- Nút Lưu --}}
-        <button type="submit" class="btn btn-success">Lưu bài viết</button>
+        {{-- ✅ Nút Cập Nhật --}}
+        <button type="submit" class="btn btn-primary">Cập nhật bài viết</button>
     </form>
 </div>
+@endsection
 
-{{-- ✅ Thêm Summernote --}}
+{{-- ✅ Kích hoạt Summernote --}}
 @push('scripts')
 <!-- Thêm Summernote từ CDN -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-bs4.min.css" rel="stylesheet">
@@ -120,4 +119,3 @@
     });
 </script>
 @endpush
-@endsection

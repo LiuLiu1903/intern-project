@@ -1,18 +1,17 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\backend\AuthController;
-use App\Http\Controllers\Auth\RegisterController;
-use App\Http\Controllers\PostController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\backend\AuthController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserController;
+use App\Http\Middleware\CheckUserStatus;
 use App\Mail\TestMail;
 use Illuminate\Support\Facades\Mail;
-use App\Http\Controllers\DashboardController;
-use App\Http\Middleware\CheckUserStatus;
-use App\Http\Requests\UpdateUserRequest;
-use App\Http\Controllers\UserController;
-
+use Illuminate\Support\Facades\Route;
 
 // Route mặc định
 Route::get('/', function () {
@@ -20,22 +19,23 @@ Route::get('/', function () {
 });
 
 // Gửi email test
-Route::get('/send-mail', function () {  
-    Mail::to('test@example.com')->send(new TestMail());  
-    return 'Mail đã được gửi thành công!';  
+Route::get('/send-mail', function () {
+    Mail::to('test@example.com')->send(new TestMail());
+    return 'Mail đã được gửi thành công!';
 });
 
 // Đăng ký
-Route::controller(RegisterController::class)->group(function () {
-    Route::get('/register', 'create')->name('register');
-    Route::post('/register', 'store');
-});
+Route::get('/register', [RegisterController::class, 'create'])->name('register'); // Form đăng ký
+Route::post('/register', [RegisterController::class, 'store']);                   // Xử lý đăng ký
+
+// ✅ Thêm route xác nhận email
+Route::get('/verify-email/{token}', [RegisterController::class, 'verifyEmail'])->name('verify.email');
 
 // Đăng nhập/Đăng xuất
 Route::controller(AuthController::class)->group(function () {
     Route::get('/login', 'showLoginForm')->name('login');
     Route::post('/login', 'login');
-    Route::post('/logout', 'logout')->name('logout');
+    Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 });
 
 // Quên mật khẩu
@@ -51,12 +51,11 @@ Route::middleware('guest')->group(function () {
 Route::middleware(['auth', CheckUserStatus::class])->group(function () {
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    
+
     // Quản lý bài viết
-    Route::controller(PostController::class)->group(function () {
-        Route::get('/posts', 'index')->name('posts.index');
-        Route::get('/posts/create', 'create')->name('posts.create');
-        Route::post('/posts', 'store')->name('posts.store');
+
+    Route::middleware(['auth'])->group(function () {
+        Route::resource('posts', PostController::class);
     });
 
     // Cập nhật hồ sơ có sử dụng binding models
@@ -64,7 +63,6 @@ Route::middleware(['auth', CheckUserStatus::class])->group(function () {
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
         Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
     });
-    
-    Route::put('/users/{id}', [UserController::class, 'update'])->middleware('auth'); 
-    
+
+    Route::put('/users/{id}', [UserController::class, 'update'])->middleware('auth');
 });

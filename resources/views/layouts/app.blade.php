@@ -30,6 +30,21 @@
         .content {
             padding: 20px;
         }
+        .logout-btn {
+            color: #fff;
+            background-color: #dc3545;
+            border: none;
+            padding: 10px;
+            width: 100%;
+            border-radius: 5px;
+            text-align: left;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background-color 0.3s;
+        }
+        .logout-btn:hover {
+            background-color: #c82333;
+        }
     </style>
 </head>
 <body>
@@ -42,7 +57,14 @@
             <a href="{{ route('dashboard') }}">🏠 Trang chủ</a>
             <a href="{{ route('posts.index') }}">📝 Quản lý bài viết</a>
             <a href="{{ route('profile.edit', auth()->id()) }}">👤 Hồ sơ</a>
-            <a href="{{ route('logout') }}">🚪 Đăng xuất</a>
+            
+            <!-- Nút Đăng xuất -->
+            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                @csrf
+            </form>
+            <button class="logout-btn" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                🚪 Đăng xuất
+            </button>
         </div>
 
         <!-- Main Content -->
